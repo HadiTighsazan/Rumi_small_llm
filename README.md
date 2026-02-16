@@ -3,30 +3,32 @@ Transformer from Scratch: Rumi Poetry Generator
 ### معرفی پروژه (Project Overview)
 این پروژه بر روی پیاده‌سازی عمیق و از پایه (From Scratch) معماری ترانسفورمرها (Transformers) تمرکز دارد. هدف اصلی، درک دقیق و پیاده‌سازی الگوریتم‌های زیرساختی هوش مصنوعی بدون استفاده از کتابخانه‌های سطح بالا یا مدل‌های از پیش آماده بوده است.
 
-ویژگی‌های کلیدی این پیاده‌سازی عبارتند از:
-* پیاده‌سازی خالص: تمامی اجزا، از جمله مکانیسم توجه (Self-Attention)، لایه‌های نرمال‌سازی و بلاک‌های ترانسفورمر، به صورت دستی کدنویسی شده‌اند.
-* توکنایزر اختصاصی: توکنایزر مدل (Tokenizer) مشابه معماری GPT و با استفاده از الگوریتم BPE (Byte Pair Encoding) به صورت دستی پیاده‌سازی شده است تا ساختار زبان فارسی و اشعار مولانا را بهینه پردازش کند.
-* منابع: این پروژه بر اساس مفاهیم مقاله انقلابی "Attention Is All You Need" و آموزش‌های ارزشمند Andrej Karpathy (پروژه nanoGPT) توسعه یافته است.
-
----
-
-### Model Architecture & Data Flow
-The architecture follows a Decoder-only Transformer design (similar to GPT). Below is the step-by-step data flow through the network:
-
-1. Embeddings (The Entry Point):
-* The input token indices are passed through a Token Embedding Table to convert them into dense vectors.
-* Simultaneously, a Positional Embedding Table generates vectors representing the position of each token in the sequence.
-* These two vectors are summed ($Token + Position$) to form the initial input representation ($x$).
-
-2. The Transformer Block (The Core):
-The input $x$ passes through a stack of $N$ identical layers (Blocks). Inside each block:
-* Multi-Head Self-Attention: The data is normalized (LayerNorm) and passed to the attention heads. Here, the model learns the relationships and context between tokens (using Query, Key, Value matrices).
-* Residual Connection: The output of attention is added back to the original input ($x + Attention(x)$).
-* Feed-Forward Network (FFN): The result is normalized again and passed through a Multi-Layer Perceptron (Linear -> ReLU -> Linear) to process the features individually.
-* Residual Connection: The output is added back again ($x + FFN(x)$).
-
-3. The Head (The Output):
-* After passing through all blocks, the final representation goes through a final LayerNorm.
-* It is then projected by a Linear Layer (Language Model Head) to the size of the vocabulary.
-* Finally, a Softmax function (implicit in CrossEntropyLoss during training) converts the logits into probabilities for the next token prediction.
  
+ویژگی‌های کلیدی این پیاده‌سازی:
+
+معماری خالص: تمامی اجزا، از جمله مکانیسم توجه (Self-Attention)، لایه‌های نرمال‌سازی و بلاک‌های ترانسفورمر، بدون استفاده از کتابخانه‌های آماده و با PyTorch خالص کدنویسی شده‌اند.
+
+توکنایزر منعطف (Char & BPE): این پروژه از دو نوع توکنایزر پشتیبانی می‌کند:
+
+Character-level: برای آموزش سریع و پایه‌ای.
+
+BPE (Byte Pair Encoding): پیاده‌سازی دستی الگوریتم BPE مشابه GPT برای فشرده‌سازی بهتر توکن‌ها.
+
+پیش‌پردازش اختصاصی فارسی: شامل ماژول پاک‌سازی متن برای یکسان‌سازی کاراکترهای فارسی/عربی، حذف اعراب و نرمال‌سازی متن جهت بهبود کیفیت خروجی مدل روی اشعار کلاسیک.
+
+منابع: الهام گرفته از مقاله "Attention Is All You Need" و آموزش‌های Andrej Karpathy.
+
+متن پیشنهادی اصلاح شده (English)
+بخش انگلیسی شما (Architecture) دقیق است، اما بخش مربوط به Tokenizer در لیست ویژگی‌ها نیاز به اصلاح دارد.
+
+Revised Key Features Section:
+
+Pure Implementation: All components, including Self-Attention mechanisms, LayerNorm, and Transformer blocks, are coded from scratch using raw PyTorch.
+
+Flexible Tokenizer: The model includes manual implementations for two tokenization strategies:
+
+Character-level: For baseline performance and simplicity.
+
+BPE (Byte Pair Encoding): An implementation similar to GPT's tokenizer for efficient sub-word processing.
+
+Persian Text Preprocessing: Includes a custom pipeline to normalize Persian characters (unifying Yeh/Keph), remove diacritics, and handle RTL formatting specifically tailored for Rumi's poetry.
