@@ -18,8 +18,7 @@ BPE (Byte Pair Encoding): پیاده‌سازی دستی الگوریتم BPE م
 
 منابع: الهام گرفته از مقاله "Attention Is All You Need" و آموزش‌های Andrej Karpathy.
 
-متن پیشنهادی اصلاح شده (English)
-بخش انگلیسی شما (Architecture) دقیق است، اما بخش مربوط به Tokenizer در لیست ویژگی‌ها نیاز به اصلاح دارد.
+
 
 Revised Key Features Section:
 
